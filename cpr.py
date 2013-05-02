@@ -18,7 +18,7 @@ class Student(object):
         self.gradYear_ = gradYear
         self.classes = []
 
-    def addClass(cid, yr, sem):
+    def addClass(self, cid, yr, sem):
         self.classes.append( (cid, (yr, sem)) )
  
 ## Bottom lines will be removed in next commit!
@@ -35,26 +35,40 @@ def parse(csvSrc):
     # cdata :: cid -> (Year, Sem) -> [sid]
     cdata = {}
 
-
-    spec = csvSrc.readline()    
+    spec = None
 
     curStudent = None
 
-    for line in csvSrc[1:]:
+    for line in csvSrc:
+        if not spec:
+            spec = True
+            continue
+        # Get data
+        gradYear,major1,major2,cYear,cSem,cID,college,courseCount,un1,un2 = line
+        # Handle Students
         if not curStudent:
-            curStudent = Student(line[1],line[0])
-        curStudent.addClass(line[5], (line[3], line[4]))
-        
-        if line[7] != '':
+            curStudent = Student(major1,gradYear)
+        assert curStudent != None
+        curStudent.addClass(cID, cYear, cSem)
+
+        # Handle class data
+        if not cID in cdata:
+            cdata[cID] = {(cYear, cSem): []}
+        elif not (cYear, cSem) in cdata[cID]:
+            cdata[cID][(cYear, cSem)] = []
+        cdata[cID][(cYear, cSem)].append(curStudent.id_)
+
+        # If its time to move onto a new student, do so.
+        if courseCount != '':
             # Save the student
-            if (len(curStudent.classes) != line[7]):
+            if (len(curStudent.classes) != int(courseCount)):
                 print "ERROR: Student's classes don't add up?!"
             sdata[curStudent.id_] = curStudent
             curStudent = None
 
+
     if curStudent:
         print "ERROR: Student left over?!"
-
     students = sdata
     return sdata, cdata
 
@@ -71,7 +85,7 @@ def main(srcFile):
     # Run tests on the parsed data
 
     # Render its results.
-
+    print studentData, courseData
     return 0
 
 def processArgs():
@@ -80,7 +94,10 @@ def processArgs():
         opts, args = getopt.getopt(sys.argv[1:],"")
         for arg in args:
             data = arg
-    if data:
+    except Exception, e:
+        raise e
+
+    if data != None:
         return data
     else:
         return None
