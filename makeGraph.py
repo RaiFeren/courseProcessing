@@ -24,7 +24,7 @@ def drawBarGraph(input, inputLabels, destName):
     # draw graph
     can = canvas.init(destName)
     chart_object.set_defaults(area.T, 
-                              size = (150, 120), # size of graph
+                              size = (300, 120), # size of graph
                               y_range = (0, None), # bounds on y axis
                               x_coord = category_coord.T(input, 0))
     
@@ -45,7 +45,7 @@ def drawBarGraph(input, inputLabels, destName):
 
     # draw legend
     ar = area.T(loc=(250,0),
-                x_axis=axis.X(label=inputLabels['x'], format="/a-30{}%d"),
+                x_axis=axis.X(label=inputLabels['x'], format="/a-45{}%4.1f"),
                 y_axis=axis.Y(label=inputLabels['y']))
              
     for plot in plots:
