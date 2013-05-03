@@ -10,6 +10,7 @@
 # You can find pychart at: http://home.gna.org/pychart/
 
 from pychart import *
+from helpers import *
 
 def exampleGraph(students, classes):
 	# here you would pull data from dictionaries but I'm just going to make stuff up
@@ -48,3 +49,16 @@ def exampleGraph(students, classes):
 
 	# clean up after ourselves
 	can.close()
+
+
+def graphGradStatusPerClass(students, classes, class):
+	""" takes in a students and classes data structure and 
+		the id of the class you want to know about and outputs
+		a 'gradStatusPerClass[class id].pdf' file """
+	# get data
+	t_year_sem = classes[class].keys()
+	
+
+	# draw graph
+
+
