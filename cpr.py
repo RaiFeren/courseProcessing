@@ -37,8 +37,9 @@ def parse(csvSrc):
             spec = True
             continue
         # Get data
-        gradYear,major1,major2,cYear,cSem,cID,college,courseCount,un1,un2 = line
-        cTag = (cYear, cSem, colege)
+        gradYear,major1,major2,cYear,cSem,cID,college,courseCount,un1,un2 \
+            = line
+        cTag = (cYear, cSem, college)
         # Handle Students
         if not curStudent:
             curStudent = Student(major1,gradYear)
@@ -79,7 +80,7 @@ def main(srcFile):
     # Run tests on the parsed data
 
     # Render its results.
-    print studentData, courseData
+    print len(courseData)
     return 0
 
 def processArgs():
