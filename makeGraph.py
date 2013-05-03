@@ -15,8 +15,9 @@ from helpers import *
 ## Draws generic multi-bar graphs
 # @param input     List of tuples. 0th element of each tuple is X
 # value. Every other value n is Y value for inputLabels['charts'][n-1]
-# @param inputLabels     Dictionary. Must have elements, 'charts':[column labels],
-# 'x':'X Label', 'y': 'Y Label'.
+# @param inputLabels Dictionary. Must have elements, 'charts':[column
+# labels], 'x':'X Label', 'y': 'Y Label', 'size': (xVal,
+# yVal). Optionally can have 'title':'titleStr'
 # @param destName Name of the pdf file to write.
 def drawBarGraph(input, inputLabels, destName):
     theme.get_options()
@@ -24,7 +25,7 @@ def drawBarGraph(input, inputLabels, destName):
     # draw graph
     can = canvas.init(destName)
     chart_object.set_defaults(area.T, 
-                              size = (300, 120), # size of graph
+                              size = inputLabels['size'], # size of graph
                               y_range = (0, None), # bounds on y axis
                               x_coord = category_coord.T(input, 0))
     
@@ -44,18 +45,22 @@ def drawBarGraph(input, inputLabels, destName):
              for x in range(0,len(inputLabels['charts']))]
 
     # draw legend
-    ar = area.T(loc=(250,0),
+    ar = area.T(loc=(inputLabels['size'][0]*2/3,0),
                 x_axis=axis.X(label=inputLabels['x'], format="/a-45{}%4.1f"),
                 y_axis=axis.Y(label=inputLabels['y']))
              
     for plot in plots:
-            ar.add_plot(plot)
+        ar.add_plot(plot)
     ar.draw()
-    
+
+    if 'title' in inputLabels:
+        tb = text_box.T(text=inputLabels['title'], loc=inputLabels['size'])
+        
+        tb.draw()
+
     # clean up after ourselves
     can.close()
     
-
 
 def exampleGraph(students, classes):
     # here you would pull data from dictionaries but I'm just going to make stuff up
@@ -99,5 +104,5 @@ if __name__ == '__main__':
     drawBarGraph(
             [(2008,0,3,6,3),(2009,0,4,10,2), (2010,10,3,7,4), (2011,1,4,5,4)],
             {'charts':['freshmen', 'sophomores', 'juniors', 'seniors'],
-             'x': "Year", 'y':"Population"},
+             'x': "Year", 'y':"Population", 'size': (250, 200)},
             'main.pdf')

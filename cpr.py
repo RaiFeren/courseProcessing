@@ -77,12 +77,15 @@ def calcNonMajors(studentData, courseData, selection):
             yearData -= 0.5
         csMajors = 0
         nonMajors = 0
+        undeclared = 0
         for sid in selection[time]:
             if studentData[sid].major_ in ['CSI', 'CSM', 'MCB']:
                 csMajors += 1
+            elif studentData[sid].major_ in ['UND']:
+                undeclared += 1
             else:
                 nonMajors += 1
-        yield(yearData, csMajors, nonMajors)
+        yield(yearData, csMajors, nonMajors, undeclared)
 
 
 def calculateTests(studentData, courseData):
@@ -95,8 +98,9 @@ def calculateTests(studentData, courseData):
     results = [x for x in calcNonMajors(studentData, courseData, selection)]
 
     return (results, 
-            {'charts':['CS Major', 'Non-CS Major'], 
-             'x': 'Year', 'y':'Population', 'title':'Who takes CS 70'})
+            {'charts':['CS Major', 'Non-CS Major', 'Undeclared'], 
+             'x': 'Year', 'y':'Population', 'title': 'Who takes CS 70',
+             'size': (350, 220)})
 
 def main(srcFile):
     # Open the file.
