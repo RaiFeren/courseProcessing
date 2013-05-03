@@ -68,11 +68,32 @@ def parse(csvSrc):
     students = sdata
     return sdata, cdata
 
-def calculateTests(studentData, courseData):
-    selection = courseData['CSCI070 HM ']
+def calcNonMajors(studentData, courseData, selection):
+    times = selection.keys()
+    times.sort()
+    for time in times:
+        yearData = int(time[0])+1
+        if time[1] == 'FA  ':
+            yearData -= 0.5
+        csMajors = 0
+        nonMajors = 0
+        for sid in selection[time]:
+            if studentData[sid].major_ in ['CSI', 'CSM', 'MCB']:
+                csMajors += 1
+            else:
+                nonMajors += 1
+        yield(yearData, csMajors, nonMajors)
 
-    
-    return ([], 
+
+def calculateTests(studentData, courseData):
+    try:
+        selection = courseData['CSCI070  HM ']
+    except KeyError, e:
+        print courseData.keys()
+        raise e
+    results = [x for x in calcNonMajors(studentData, courseData, selection)]
+
+    return (results, 
             {'charts':['CS Major', 'Non-CS Major'], 
              'x': 'Year', 'y':'Population', 'title':'Who takes CS 70'})
 
