@@ -1,0 +1,60 @@
+School Prefix For Majors:
+H - Harvey Mudd College
+s - Scripps College
+M - Claremont McKenna College
+Z - Pitzer College
+P - Pomona College
+
+Majors:
+ART - Art
+ANT - Anthropology
+BIO - Biology
+CHB - Chemistry/Biology
+CHE - Chemistry
+CHI - Chineese
+CLA - Classics
+CSI - Computer Science
+CSM - Computer Science/Mathematics
+ECA - Economics and Accounting
+ECO - Economics
+EGR - Engineering
+ENG - English
+EST - Environmental Studies
+EVA - Environmental Analysis
+EWL - English and World Literature
+DAN - Dance
+GEO - Geology
+GOV - Government
+HIS - History
+HSP - Hispanic Studies
+IPS - Independant Study
+LCS - Linguistics and Cognative Science
+LEG - Legal Studies
+LIT - Literature
+MAB - Mathematical Biology
+MAT - Mathematics
+MCB - Mathematical and Computational Biology
+MDS - Media Studies
+MEC - Mathematical Economics
+MUS - Music
+NEU - Neuro Science
+PHY - Physics
+PHI - Philosophy
+PIR - Politics and International Relations
+PTS - Post Tramatic Stress Disorder (Unknown at Mudd)
+PSY - Psychology
+SMG - Science and Management
+SOC - Sociology
+SPA - Spanish
+STS - Science, Technology, and Society
+UND - Undeclared
+
+School:
+CM - Claremont McKenna College
+HM - Harvey Mudd College
+PO - Pomona College
+
+Session:
+FA - Fall
+SP - Spring
+SU - Summer
