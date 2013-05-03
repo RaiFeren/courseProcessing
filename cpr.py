@@ -9,6 +9,7 @@ import re
 import os, sys, getopt
 import csv
 
+import makeGraph
 
 class Student(object):
     def __init__(self, mdata, gradYear):
@@ -67,6 +68,14 @@ def parse(csvSrc):
     students = sdata
     return sdata, cdata
 
+def calculateTests(studentData, courseData):
+    selection = courseData['CSCI070  HM ']
+
+    
+    return ([], 
+            {'charts':['CS Major', 'Non-CS Major'], 
+             'x': 'Year', 'y':'Population', 'title':'Who takes CS 70'})
+
 def main(srcFile):
     # Open the file.
     rawText = open(srcFile, 'r')
@@ -78,9 +87,10 @@ def main(srcFile):
     studentData, courseData = parse(textRead)
 
     # Run tests on the parsed data
+    inp, inpL = calculateTests(studentData, courseData)
 
     # Render its results.
-    print len(courseData)
+    makeGraph.drawBarGraph(inp, inpL, "results.pdf")
     return 0
 
 def processArgs():
