@@ -84,12 +84,14 @@ def main(srcFile):
     inp, inpL = calcStatistics.calculateCS70Tests(studentData, courseData)
     t1, t2 = calcStatistics.calcCS5Tests(studentData, courseData)
     t3, t4 = calcStatistics.noMuddCS5Tests(studentData, courseData)
-    
+    c5v42p, c5v42l = calcStatistics.calc5vs42(studentData, courseData)
 
     # Render its results.
     makeGraph.drawBarGraph(inp, inpL, "cs70Results.pdf")
     makeGraph.drawBarGraph(t1, t2, "cs5Results.pdf")
     makeGraph.drawBarGraph(t3, t4, "cs5nmResults.pdf")
+    makeGraph.drawBarGraph(c5v42p, c5v42l, "cs5v42Results.pdf")
+
     
 
     return 0

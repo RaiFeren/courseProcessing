@@ -37,6 +37,15 @@ def calcCampus(studentData, courseData, selection):
         yield(yearData, years['H'], years['S'],
               years['M'], years['Z'], years['P'])
 
+def basicSum(studentData, courseData, selection):
+    times = selection.keys()
+    times.sort()
+    for time in times:
+        yearData = int(time[0])+1
+        if time[1] == 'FA  ':
+            yearData -= 0.5
+        yield(yearData, len(selection[time]))
+    
 
 
 def calculateCS70Tests(studentData, courseData):
@@ -67,3 +76,17 @@ def noMuddCS5Tests(studentData, courseData):
              'x': 'Year', 'y':'Population', 'title': 'CS 5 without Mudd',
              'size': (350, 220)})
 
+def calc5vs42(studentData, courseData):
+    selection5 = courseData['CSCI005  HM ']
+    results5 = [x for x in basicSum(studentData, courseData, selection5)]
+
+    selection42 = courseData['CSCI042  HM ']
+    results42 = [x for x in basicSum(studentData, courseData, selection42)]
+
+    resultsVS = [(x[0], x[1], y[1]) 
+                 for x in results5 for y in results42 if x[0] == y[0]]
+    return (resultsVS,
+            {'charts':['CS 5', 'CS 42'], 
+             'x': 'Year', 'y':'Population', 'title': 'CS 5 vs CS 42',
+             'size': (350, 220)})
+            
