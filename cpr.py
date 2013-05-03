@@ -10,6 +10,8 @@ import os, sys, getopt
 import csv
 
 import makeGraph
+import calcStatistics
+import helpers
 
 class Student(object):
     def __init__(self, mdata, gradYear):
@@ -113,10 +115,24 @@ def main(srcFile):
     studentData, courseData = parse(textRead)
 
     # Run tests on the parsed data
-    inp, inpL = calculateTests(studentData, courseData)
+    inp, inpL = calcStatistics.calculateCS70Tests(studentData, courseData)
+    t1, t2 = calcStatistics.calcCS5Tests(studentData, courseData)
+    t3, t4 = calcStatistics.noMuddCS5Tests(studentData, courseData)
+    c5v42p, c5v42l = calcStatistics.calc5vs42(studentData, courseData)
+    classYr105,classYr105data = helpers.getClassifiedStudentsByYear(studentData,courseData, "CSCI105  JT ")
 
+    print classYr105data
+    print classYr105
+    
     # Render its results.
-    makeGraph.drawBarGraph(inp, inpL, "results.pdf")
+    makeGraph.drawBarGraph(inp, inpL, "cs70Results.pdf")
+    makeGraph.drawBarGraph(t1, t2, "cs5Results.pdf")
+    makeGraph.drawBarGraph(t3, t4, "cs5nmResults.pdf")
+    makeGraph.drawBarGraph(c5v42p, c5v42l, "cs5v42Results.pdf")
+    makeGraph.drawBarGraph(classYr105data,classYr105, "105population.pdf")
+
+    
+
     return 0
 
 def processArgs():
