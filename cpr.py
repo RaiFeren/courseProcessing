@@ -18,17 +18,11 @@ class Student(object):
         self.gradYear_ = gradYear
         self.classes = []
 
-    def addClass(self, cid, yr, sem):
-        self.classes.append( (cid, (yr, sem)) )
+    def addClass(self, cid, ctag):
+        self.classes.append( (cid, ctag) )
+
+
  
-## Bottom lines will be removed in next commit!
-   
-# students :: sid -> Student
-#students = {}
-# classes :: cid -> (Year, Sem) -> [sid]
-#classes = {}
-
-
 def parse(csvSrc):
     # sdata :: sid -> Student
     sdata = {}
@@ -36,7 +30,6 @@ def parse(csvSrc):
     cdata = {}
 
     spec = None
-
     curStudent = None
 
     for line in csvSrc:
@@ -45,18 +38,19 @@ def parse(csvSrc):
             continue
         # Get data
         gradYear,major1,major2,cYear,cSem,cID,college,courseCount,un1,un2 = line
+        cTag = (cYear, cSem, colege)
         # Handle Students
         if not curStudent:
             curStudent = Student(major1,gradYear)
         assert curStudent != None
-        curStudent.addClass(cID, cYear, cSem)
+        curStudent.addClass(cID, cTag)
 
         # Handle class data
         if not cID in cdata:
-            cdata[cID] = {(cYear, cSem): []}
-        elif not (cYear, cSem) in cdata[cID]:
-            cdata[cID][(cYear, cSem)] = []
-        cdata[cID][(cYear, cSem)].append(curStudent.id_)
+            cdata[cID] = {cTag: []}
+        elif not cTag in cdata[cID]:
+            cdata[cID][cTag] = []
+        cdata[cID][cTag].append(curStudent.id_)
 
         # If its time to move onto a new student, do so.
         if courseCount != '':
