@@ -10,6 +10,7 @@ import os, sys, getopt
 import csv
 
 import makeGraph
+import calcStatistics
 
 class Student(object):
     def __init__(self, mdata, gradYear):
@@ -68,38 +69,6 @@ def parse(csvSrc):
     students = sdata
     return sdata, cdata
 
-def calcNonMajors(studentData, courseData, selection):
-    times = selection.keys()
-    times.sort()
-    for time in times:
-        yearData = int(time[0])+1
-        if time[1] == 'FA  ':
-            yearData -= 0.5
-        csMajors = 0
-        nonMajors = 0
-        undeclared = 0
-        for sid in selection[time]:
-            if studentData[sid].major_ in ['CSI', 'CSM', 'MCB']:
-                csMajors += 1
-            elif studentData[sid].major_ in ['UND']:
-                undeclared += 1
-            else:
-                nonMajors += 1
-        yield(yearData, csMajors, nonMajors, undeclared)
-
-
-def calculateTests(studentData, courseData):
-    try:
-        selection = courseData['CSCI070  HM ']
-    except KeyError, e:
-        print courseData.keys()
-        raise e
-    results = [x for x in calcNonMajors(studentData, courseData, selection)]
-
-    return (results, 
-            {'charts':['CS Major', 'Non-CS Major', 'Undeclared'], 
-             'x': 'Year', 'y':'Population', 'title': 'Who takes CS 70',
-             'size': (350, 220)})
 
 def main(srcFile):
     # Open the file.
@@ -112,10 +81,17 @@ def main(srcFile):
     studentData, courseData = parse(textRead)
 
     # Run tests on the parsed data
-    inp, inpL = calculateTests(studentData, courseData)
+    inp, inpL = calcStatistics.calculateCS70Tests(studentData, courseData)
+    t1, t2 = calcStatistics.calcCS5Tests(studentData, courseData)
+    t3, t4 = calcStatistics.noMuddCS5Tests(studentData, courseData)
+    
 
     # Render its results.
-    makeGraph.drawBarGraph(inp, inpL, "results.pdf")
+    makeGraph.drawBarGraph(inp, inpL, "cs70Results.pdf")
+    makeGraph.drawBarGraph(t1, t2, "cs5Results.pdf")
+    makeGraph.drawBarGraph(t3, t4, "cs5nmResults.pdf")
+    
+
     return 0
 
 def processArgs():
