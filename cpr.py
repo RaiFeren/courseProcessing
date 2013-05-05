@@ -1,7 +1,7 @@
 ## @namespace cpr
 # Main Driver for Processing Course Data.
 # @author Rai Feren, Beryl Egerter
-# 
+#
 # This is the main driver for the course processor.
 #
 # Usage: `python cpr.py <data source file>`
@@ -11,7 +11,6 @@ import csv
 
 import makeGraph
 import calcStatistics
-import helpers
 
 class Student(object):
     def __init__(self, mdata, gradYear):
@@ -25,7 +24,7 @@ class Student(object):
         self.classes.append( (cid, ctag) )
 
 
- 
+
 def parse(csvSrc):
     # sdata :: sid -> Student
     sdata = {}
@@ -99,8 +98,8 @@ def calculateTests(studentData, courseData):
         raise e
     results = [x for x in calcNonMajors(studentData, courseData, selection)]
 
-    return (results, 
-            {'charts':['CS Major', 'Non-CS Major', 'Undeclared'], 
+    return (results,
+            {'charts':['CS Major', 'Non-CS Major', 'Undeclared'],
              'x': 'Year', 'y':'Population', 'title': 'Who takes CS 70',
              'size': (350, 220)})
 
@@ -111,7 +110,7 @@ def main(srcFile):
         print "Problem with the source file!"
         return -1
     # Parse it.
-    textRead = csv.reader(rawText) 
+    textRead = csv.reader(rawText)
     studentData, courseData = parse(textRead)
 
     # Run tests on the parsed data
@@ -119,19 +118,17 @@ def main(srcFile):
     t1, t2 = calcStatistics.calcCS5Tests(studentData, courseData)
     t3, t4 = calcStatistics.noMuddCS5Tests(studentData, courseData)
     c5v42p, c5v42l = calcStatistics.calc5vs42(studentData, courseData)
-    classYr105,classYr105data = helpers.getClassifiedStudentsByYear(studentData,courseData, "CSCI105  JT ")
+    pop105p, pop105l = calcStatistics.calc105Population(studentData, courseData)
 
-    print classYr105data
-    print classYr105
-    
+
     # Render its results.
     makeGraph.drawBarGraph(inp, inpL, "cs70Results.pdf")
     makeGraph.drawBarGraph(t1, t2, "cs5Results.pdf")
     makeGraph.drawBarGraph(t3, t4, "cs5nmResults.pdf")
     makeGraph.drawBarGraph(c5v42p, c5v42l, "cs5v42Results.pdf")
-    makeGraph.drawBarGraph(classYr105data,classYr105, "105population.pdf")
+    makeGraph.drawBarGraph(pop105p, pop105l, "105population.pdf")
 
-    
+
 
     return 0
 
