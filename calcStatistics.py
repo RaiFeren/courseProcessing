@@ -123,6 +123,38 @@ def calc105Population(studentData, courseData):
              'size': (500, 220)})
 
 
+def calcPopbyClass(studentData, courseData, courseNumStr):
+    # get all data into a dictionary where years key to student lists
+    cids = getKeys(courseData, courseNumStr, False)
+    print "CourseIds found: ", cids
+    x = [[(int(i[0])+numSemester(i[1]), courseData[cid][i]) \
+    for i in courseData[cid].keys()] for cid in cids ]
+    x = collapse(x)
+    # change the students list to a count of frosh/soph/jun/sen
+    counts = {}
+    for i in x.keys():
+        counts[i] = [0,0,0,0]
+        for s in x[i]:
+            t = getClassYear(studentData[s].gradYear_, i)
+            # print i, t
+            #print "year: " + str(i) + " gradYear: " + \
+            #    str(studentData[s].gradYear_) + " calcYear: " + str(t)
+            if t == -1:
+                print "-1 for year " + str(i) + " " + studentData[s].__repr__()
+            elif studentData[s].college_ == "H":
+                counts[i][t] = counts[i][t] + 1
+            else:
+                print studentData[s].college_
+    results = [(yr, counts[yr][0], counts[yr][1], counts[yr][2], \
+                counts[yr][3]) for yr in counts.keys()]
+    results.sort()
+
+    return (results,
+            {'charts':['Freshmen', 'Sophomores', 'Juniors', 'Seniors'],
+             'x': 'Year', 'y': 'Population',
+             'title': 'Population of '+courseNumStr+' (Mudd Students Only)',
+             'size': (500, 220)})
+
 ## Gets the keys for all classes with a certain identifier.
 # @param lab Boolean. Whether to return the labs for the
 # course or the actual classes
