@@ -151,9 +151,38 @@ def calcPopbyClass(studentData, courseData, courseNumStr):
 
     return (results,
             {'charts':['Freshmen', 'Sophomores', 'Juniors', 'Seniors'],
-             'x': 'Year', 'y': 'Population',
+             'x': 'Course Year', 'y': 'Population',
              'title': 'Population of '+courseNumStr+' (Mudd Students Only)',
              'size': (500, 220)})
+
+def calcPopbyGrad(studentData, courseData, courseNumStr):
+    cids = getKeys(courseData, courseNumStr, False)
+    print "CourseIds found: ", cids
+    x = [[(int(i[0])+numSemester(i[1]), courseData[cid][i]) \
+    for i in courseData[cid].keys()] for cid in cids ]
+    x = collapse(x)
+
+    # counts is class year: [num semester taken (8)]
+    counts = {}
+    for i in x.keys():
+        for sid in x[i]:
+            gradYear = studentData[sid].gradYear_
+            if not gradYear in counts.keys():
+                counts[gradYear] = [0,0,0,0]
+            yearNum = getClassYear(int(gradYear), i)
+            counts[gradYear][yearNum] = counts[gradYear][yearNum] + 1
+    results = [(int(yr), counts[yr][0], counts[yr][1], counts[yr][2],
+                counts[yr][3]) for yr in counts.keys()]
+    results.sort()
+
+    return (results,
+        {'charts':['Freshman Year', 'Sophomore Year', 'Junior Year', 'Senior Year'],
+             'x': 'Graduation Year', 'y': 'Population',
+             'title': 'Population of '+courseNumStr+' by Grad Year (Mudd Students Only)',
+             'size': (500, 220)}
+        )
+
+
 
 ## Gets the keys for all classes with a certain identifier.
 # @param lab Boolean. Whether to return the labs for the
