@@ -7,9 +7,9 @@ def calcNonMajors(studentData, courseData, selection):
     times = selection.keys()
     times.sort()
     for time in times:
-        yearData = int(time[0])+1
+        yearData = int(time[0])#+1
         if time[1] == 'FA  ':
-            yearData -= 0.5
+            yearData += 0.5
         csMajors = 0
         nonMajors = 0
         undeclared = 0
@@ -27,9 +27,9 @@ def calcCampus(studentData, courseData, selection):
     times = selection.keys()
     times.sort()
     for time in times:
-        yearData = int(time[0])+1
+        yearData = int(time[0])#+1
         if time[1] == 'FA  ':
-            yearData -= 0.5
+            yearData += 0.5
         years = {'H': 0, 'S': 0, 'M': 0, 'Z': 0, 'P': 0}
 
         for sid in selection[time]:
@@ -42,9 +42,9 @@ def basicSum(studentData, courseData, selection):
     times = selection.keys()
     times.sort()
     for time in times:
-        yearData = int(time[0])+1
+        yearData = int(time[0])#+1
         if time[1] == 'FA  ':
-            yearData -= 0.5
+            yearData += 0.5
         yield(yearData, len(selection[time]))
 
 

@@ -123,6 +123,7 @@ def main(srcFile):
     pop140p, pop140l = calcStatistics.calcPopbyClass(studentData, courseData, "140")
     pop105gp, pop105gl = calcStatistics.calcPopbyGrad(studentData, courseData, "105")
     pop70gp, pop70gl = calcStatistics.calcPopbyGrad(studentData, courseData, "70")
+    pop140gp, pop140gl = calcStatistics.calcPopbyGrad(studentData, courseData, "140")
 
 
 
@@ -136,6 +137,7 @@ def main(srcFile):
     makeGraph.drawBarGraph(pop140p, pop140l, "140population.pdf")
     makeGraph.drawBarGraph(pop105gp, pop105gl, "105population_grad.pdf")
     makeGraph.drawBarGraph(pop70gp, pop70gl, "70population_grad.pdf")
+    makeGraph.drawBarGraph(pop140gp, pop140gl, "140population_grad.pdf")
 
 
 
