@@ -126,27 +126,24 @@ def main(srcFile):
 
     calcStatistics.test(courseData)
 
-    pop105p, pop105l = calcStatistics.calc105Population(studentData, courseData)
-    pop70p, pop70l = calcStatistics.calcPopbyClass(studentData, courseData, "70")
-    pop140p, pop140l = calcStatistics.calcPopbyClass(studentData, courseData, "140")
-    pop105gp, pop105gl = calcStatistics.calcPopbyGrad(studentData, courseData, "105")
-    pop70gp, pop70gl = calcStatistics.calcPopbyGrad(studentData, courseData, "70")
-    pop140gp, pop140gl = calcStatistics.calcPopbyGrad(studentData, courseData, "140")
+
+
+
+    # Do things cleanly...
+    for class_ in ['70', '140', '105', '131', '81']:
+        # Get statistics
+        popP, popL = calcStatistics.calcPopbyClass(studentData, courseData, class_)
+        popGP, popGL = calcStatistics.calcPopbyGrad(studentData, courseData, class_)
+        # Render 'em
+        makeGraph.drawBarGraph(popP, popL, class_+"population.pdf")
+        makeGraph.drawBarGraph(popGP, popGL, class_+"population_grad.pdf")
+        
 
 
     # Render its results.
     makeGraph.drawBarGraph(inp, inpL, "cs70Results.pdf")
     makeGraph.drawBarGraph(t1, t2, "cs5Results.pdf")
     makeGraph.drawBarGraph(t3, t4, "cs5nmResults.pdf")
- #   makeGraph.drawBarGraph(c5v42p, c5v42l, "cs5v42Results.pdf")
-    makeGraph.drawBarGraph(pop105p, pop105l, "105population.pdf")
-    makeGraph.drawBarGraph(pop70p, pop70l, "70population.pdf")
-    makeGraph.drawBarGraph(pop140p, pop140l, "140population.pdf")
-    makeGraph.drawBarGraph(pop105gp, pop105gl, "105population_grad.pdf")
-    makeGraph.drawBarGraph(pop70gp, pop70gl, "70population_grad.pdf")
-    makeGraph.drawBarGraph(pop140gp, pop140gl, "140population_grad.pdf")
-
-
 
     return 0
 
