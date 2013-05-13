@@ -3,15 +3,18 @@
 # @author Rai Feren, Beryl Egerter
 import re
 
-import re
+def timeToFloat(year, semester):
+    ''' If Spring, is 0.0. If Summer, is 0.5. '''
+    yearData = int(year)
+    if semester == 'FA  ':
+        yearData += 0.5
+    return yearData
 
 def calcNonMajors(studentData, courseData, selection):
     times = selection.keys()
     times.sort()
     for time in times:
-        yearData = int(time[0])#+1
-        if time[1] == 'FA  ':
-            yearData += 0.5
+        yearData = timeToFloat(time[0], time[1])        
         csMajors = 0
         nonMajors = 0
         undeclared = 0
@@ -29,9 +32,7 @@ def calcCampus(studentData, courseData, selection):
     times = selection.keys()
     times.sort()
     for time in times:
-        yearData = int(time[0])#+1
-        if time[1] == 'FA  ':
-            yearData += 0.5
+        yearData = timeToFloat(time[0], time[1])
         years = {'H': 0, 'S': 0, 'M': 0, 'Z': 0, 'P': 0}
 
         for sid in selection[time]:
@@ -44,9 +45,7 @@ def basicSum(studentData, courseData, selection):
     times = selection.keys()
     times.sort()
     for time in times:
-        yearData = int(time[0])#+1
-        if time[1] == 'FA  ':
-            yearData += 0.5
+        yearData = timeToFloat(time[0], time[1])
         yield(yearData, len(selection[time]))
 
 
@@ -63,7 +62,6 @@ def calculateCS70Tests(studentData, courseData):
 def calcCS5Tests(studentData, courseData):
     selection = courseData['CSCI005  HM ']
     results = [x for x in calcCampus(studentData, courseData, selection)]
-
     return (results,
             {'charts':['HMC', 'Scripps', 'CMC', 'Pitzer', 'Pomona'],
              'x': 'Year', 'y':'Population', 'title': 'CS 5 by Campus',
@@ -73,7 +71,6 @@ def noMuddCS5Tests(studentData, courseData):
     selection = courseData['CSCI005  HM ']
     results = [(x[0],x[2], x[3], x[4], x[5])
                for x in calcCampus(studentData, courseData, selection)]
-
     return (results,
             {'charts':['Scripps', 'CMC', 'Pitzer', 'Pomona'],
              'x': 'Year', 'y':'Population', 'title': 'CS 5 without Mudd',
@@ -82,10 +79,8 @@ def noMuddCS5Tests(studentData, courseData):
 def calc5vs42(studentData, courseData):
     selection5 = courseData['CSCI005  HM ']
     selection42 = courseData['CSCI042  HM ']
-
     resultsVS = [(x[0], x[1], y[1])
                  for x in results5 for y in results42 if x[0] == y[0]]
-
     return (resultsVS,
             {'charts':['CS 5', 'CS 42'],
              'x': 'Year', 'y':'Population', 'title': 'CS 5 vs CS 42',
@@ -105,9 +100,7 @@ def distToAlgs(studentData, courseData):
             classMatch = re.match(classRE, class_[0])
             if not classMatch:
                 continue
-            time = int(class_[1][0])+1
-            if class_[1][1] == 'FA  ':
-                time -= 0.5
+            time = timeToFloat(class_[1][0], class_[1][1])
             if classMatch.group(1) == '070':            
                 sem70 = time
             elif classMatch.group(1) == '140':
@@ -129,7 +122,6 @@ def percentCourse(studentData, courseData):
 
 
 def test(courseData):
-    
     parsedKeys = [re.match('''^CSCI(\d\d\d)(..)(\w\w)''', x) 
                   for x in courseData.keys()]
     transformed = [(x.group(1), x.group(2), x.group(3)) 
