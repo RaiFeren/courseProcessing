@@ -3,6 +3,8 @@
 # @author Rai Feren, Beryl Egerter
 import re
 
+CSMajors = ['CSI', 'CSM', 'MCB']
+
 def timeToFloat(year, semester):
     ''' If Spring, is 0.0. If Summer, is 0.5. '''
     yearData = int(year)
@@ -10,16 +12,17 @@ def timeToFloat(year, semester):
         yearData += 0.5
     return yearData
 
+
+
 def calcNonMajors(studentData, courseData, selection):
     times = selection.keys()
     times.sort()
     for time in times:
         yearData = timeToFloat(time[0], time[1])        
-        csMajors = 0
-        nonMajors = 0
-        undeclared = 0
+        # Initialize some stuff
+        csMajors, nonMajors, undeclared = 0,0,0
         for sid in selection[time]:
-            if studentData[sid].major_ in ['CSI', 'CSM', 'MCB']:
+            if studentData[sid].major_ in CSMajors:
                 csMajors += 1
             elif studentData[sid].major_ in ['UND']:
                 undeclared += 1
@@ -76,15 +79,15 @@ def noMuddCS5Tests(studentData, courseData):
              'x': 'Year', 'y':'Population', 'title': 'CS 5 without Mudd',
              'size': (350, 220)})
 
-def calc5vs42(studentData, courseData):
-    selection5 = courseData['CSCI005  HM ']
-    selection42 = courseData['CSCI042  HM ']
-    resultsVS = [(x[0], x[1], y[1])
-                 for x in results5 for y in results42 if x[0] == y[0]]
-    return (resultsVS,
-            {'charts':['CS 5', 'CS 42'],
-             'x': 'Year', 'y':'Population', 'title': 'CS 5 vs CS 42',
-             'size': (350, 220)})
+#def calc5vs42(studentData, courseData):
+#    selection5 = courseData['CSCI005  HM ']
+#    selection42 = courseData['CSCI042  HM ']
+#    resultsVS = [(x[0], x[1], y[1])
+#                 for x in selection5 for y in selection42 if x[0] == y[0]]
+#    return (resultsVS,
+#            {'charts':['CS 5', 'CS 42'],
+#             'x': 'Year', 'y':'Population', 'title': 'CS 5 vs CS 42',
+#             'size': (350, 220)})
 
             
 
@@ -141,9 +144,6 @@ def calc105Population(studentData, courseData):
         counts[i] = [0,0,0,0]
         for s in x[i]:
             t = getClassYear(studentData[s].gradYear_, i)
-            # print i, t
-            #print "year: " + str(i) + " gradYear: " + \
-            #    str(studentData[s].gradYear_) + " calcYear: " + str(t)
             if t == -1:
                 print "-1 for year " + str(i) + " " + studentData[s].__repr__()
             elif studentData[s].college_ == "H":
@@ -174,9 +174,6 @@ def calcPopbyClass(studentData, courseData, courseNumStr):
         counts[i] = [0,0,0,0]
         for s in x[i]:
             t = getClassYear(studentData[s].gradYear_, i)
-            # print i, t
-            #print "year: " + str(i) + " gradYear: " + \
-            #    str(studentData[s].gradYear_) + " calcYear: " + str(t)
             if t == -1:
                 print "-1 for year " + str(i) + " " + studentData[s].__repr__()
             elif studentData[s].college_ == "H":

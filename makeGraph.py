@@ -10,7 +10,6 @@
 # You can find pychart at: http://home.gna.org/pychart/
 
 from pychart import *
-from helpers import *
 
 ## Draws generic multi-bar graphs
 # @param input     List of tuples. 0th element of each tuple is X
