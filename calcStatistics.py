@@ -213,7 +213,7 @@ def calcPopbyGrad(studentData, courseData, courseNumStr):
     return (results,
         {'charts':['Freshman Year', 'Sophomore Year', 'Junior Year', 'Senior Year'],
              'x': 'Graduation Year', 'y': 'Population',
-             'title': 'Population of '+courseNumStr+' by Grad Year (Mudd Students Only)',
+             'title': 'When Students Take '+courseNumStr+' by Grad Year (Mudd Students Only)',
              'size': (500, 220)}
         )
 
