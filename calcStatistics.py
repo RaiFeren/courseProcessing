@@ -2,6 +2,8 @@
 # Calculates various statistics in a cool way.
 # @author Rai Feren, Beryl Egerter
 
+import re
+
 def calcNonMajors(studentData, courseData, selection):
     times = selection.keys()
     times.sort()
@@ -78,15 +80,57 @@ def noMuddCS5Tests(studentData, courseData):
 
 def calc5vs42(studentData, courseData):
     selection5 = courseData['CSCI005  HM ']
-    results5 = [x for x in basicSum(studentData, courseData, selection5)]
-
     selection42 = courseData['CSCI042  HM ']
-    results42 = [x for x in basicSum(studentData, courseData, selection42)]
 
     resultsVS = [(x[0], x[1], y[1]) 
-                 for x in results5 for y in results42 if x[0] == y[0]]
+                 for x in basicSum(studentData, courseData, selection5) 
+                 for y in basicSum(studentData, courseData, selection42) 
+                 if x[0] == y[0]]
     return (resultsVS,
             {'charts':['CS 5', 'CS 42'], 
              'x': 'Year', 'y':'Population', 'title': 'CS 5 vs CS 42',
              'size': (350, 220)})
             
+
+# Distance between CS70 and Algs
+def distToAlgs(studentData, courseData):
+    classRE = re.compile('''^CSCI(\d\d\d)(..)(\w\w)''')
+    results = {}
+    for sid in studentData.values():
+        sem70 = None
+        sem140 = None
+        distance = None
+        for class_ in sid.classes:
+            classMatch = re.match(classRE, class_[0])
+            if not classMatch:
+                continue
+            time = int(class_[1][0])+1
+            if class_[1][1] == 'FA  ':
+                time -= 0.5
+            if classMatch.group(1) == '070':            
+                sem70 = time
+            elif classMatch.group(1) == '140':
+                sem140 = time
+        if sem70 and sem140:
+            distance = 2*(sem140-sem70) # Get num semesters passed.
+            if distance < 0:
+                print 'This person is negative?!', sid
+            if not sid.gradYear_ in results:
+                results[sid.gradYear_] = []
+            results[sid.gradYear_].append(distance)
+    print results
+
+    return None, None
+
+# Plot % of current CS Class taking each CS Course.
+def percentCourse(studentData, courseData):
+    return None, None
+
+
+def test(courseData):
+    
+    parsedKeys = [re.match('''^CSCI(\d\d\d)(..)(\w\w)''', x) 
+                  for x in courseData.keys()]
+    transformed = [(x.group(1), x.group(2), x.group(3)) 
+                   for x in parsedKeys if x]
+    print transformed

@@ -20,6 +20,11 @@ class Student(object):
         self.gradYear_ = gradYear
         self.classes = []
 
+    def __repr__(self):
+        return "\n\t{0}:{1} {2},{3}\n\t\t{4}".format(self.id_, self.college_, 
+                                            self.major_, self.gradYear_, 
+                                            self.classes)
+
     def addClass(self, cid, ctag):
         self.classes.append( (cid, ctag) )
 
@@ -85,6 +90,9 @@ def main(srcFile):
     t1, t2 = calcStatistics.calcCS5Tests(studentData, courseData)
     t3, t4 = calcStatistics.noMuddCS5Tests(studentData, courseData)
     c5v42p, c5v42l = calcStatistics.calc5vs42(studentData, courseData)
+    distData, distLabels = calcStatistics.distToAlgs(studentData, courseData)
+
+    calcStatistics.test(courseData)
 
     # Render its results.
     makeGraph.drawBarGraph(inp, inpL, "cs70Results.pdf")
